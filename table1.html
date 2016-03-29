@@ -20,17 +20,25 @@
   <div id="tableau"></div>
 
   <script>
+    var CELLSCONTENT = [];
+  
     var App = React.createClass({
       render: function() {
        return (
-         <div>MA TABLE</div>
+         <table>
+          <tbody>
+              <tr>
+                <td></td>
+              </tr>
+          </tbody>
+         </table>
        ); 
       }
     });
       
-ReactDOM.render(
-  <App/>, document.getElementById('tableau')
-);
+    ReactDOM.render(
+      <App/>, document.getElementById('tableau')
+    );
   </script>
 
 </body>
