@@ -14,17 +14,27 @@
   <p>Anywhere in this page, place your github user name</p>
   <p>like this : <b>LumenKairos</b></p>
 
-  <button>Add a Col</button>
-  <button>Add a Raw</button>
+  <button id="add-col">Add a Col</button>
+  <button id="add-row">Add a Row</button>
 
   <div id="tableau"></div>
 
   <script>
     var CELLSCONTENT = [];
-  
+    var addRow = function () {
+      console.log('a row has been added');
+    }; 
+    var addCol = function () {
+      console.log('a col has been added');
+    };
+    
+    document.getElementById('add-row').onclick = addRow;
+    document.getElementById('add-col').onclick = addcol;
+    
+    
     var App = React.createClass({
       render: function() {
-        console.log('My name is react and I am working')
+        console.log('My name is react and I am working');
        return (
          <table>
           <tbody>
