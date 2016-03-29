@@ -1,17 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-  h1 {color:red;}
-</style>
+  <script src="build/react.js"></script>
+  <script src="build/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+  <style>
+    h1 {color:red;}
+  </style>
 </head>
 <body>
-<h1>This is a html page</h1>
+  <h1>This is a html page</h1>
 
-<p>Anywhere in this page, place your github user name</p>
-<p>like this : <b>LumenKairos</b></p>
+  <p>Anywhere in this page, place your github user name</p>
+  <p>like this : <b>LumenKairos</b></p>
 
-<button>Add a Col</button>
-<button>Add a Raw</button>
+  <button>Add a Col</button>
+  <button>Add a Raw</button>
+
+  <div id="tableau"></div>
+
+  <script>
+    var App = React.createClass({
+      render: function() {
+       return (
+         <div>MA TABLE</div>
+       ); 
+      }
+    });
+      
+ReactDOM.render(
+  <App/>, document.getElementById('tableau')
+);
+  </script>
+
 </body>
 </html>
