@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mon tableau</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <style>
+    h1 {
+      color: green;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 10px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <h1>Mon TABLEAU</h1>
+    <div id="tableau"></div>
+
+    <script  type="text/babel">
+var app;
+var TABLECONTENT = [
+  ["a","1"],
+  ["b","2"],
+  ["c","3"],
+  ["d","4"]
+];
+    
+var Cell = React.createClass({
+  handleChange: function(event) {
+    var rowIndex = this.props.rowIndex;
+    var cellIndex = this.props.cellIndex
+    var e = event.target.value;
+    TABLECONTENT[rowIndex][cellIndex] = e;
+    app.setState({
+      tableContent: TABLECONTENT
+    });
+  },
+  moveRowUp: function(){
+    var index = this.props.rowIndex;
+    var movedRow = TABLECONTENT[index];
+    var replacedRow= TABLECONTENT[index - 1];
+    TABLECONTENT[index - 1] = movedRow;
+    TABLECONTENT[index] = replacedRow;
+    app.setState({
+      tableContent: TABLECONTENT
+    });
+  },
+  moveRowDown: function(){
+    console.log("Row moved down")
+  },
+  render: function () {
+    if(this.props.rowIndex>1 && this.props.rowIndex<TABLECONTENT.length - 1 && this.props.cellIndex === 0) {
+      return (
+      <td>
+        <i className="fa fa-chevron-left" onClick={this.moveRowUp}></i>
+        <input type="text" value={this.props.value} onChange={this.handleChange}/>
+        <i className="fa fa-chevron-right" onClick={this.moveRowDown}></i>
+      </td>
+      );
+    } else if(this.props.rowIndex===1 && this.props.cellIndex === 0) {
+      return (
+      <td>
+        <input type="text" value={this.props.value} onChange={this.handleChange}/>
+        <i className="fa fa-chevron-right" onClick={this.moveRowDown}></i>
+      </td>
+      );
+    } else if(this.props.rowIndex===TABLECONTENT.length - 1 && this.props.cellIndex === 0) {
+      return (
+      <td>
+        <i className="fa fa-chevron-left" onClick={this.moveRowUp}></i>
+        <input type="text" value={this.props.value} onChange={this.handleChange}/>
+      </td>
+      );
+    } else {
+      return (
+        <td>
+          <input type="text" value={this.props.value} onChange={this.handleChange}/>
+        </td>
+      );
+    }
+  }
+});
+    
+var Row = React.createClass({
+    render: function () {
+    var self = this;
+      return (
+        <tr>
+          {this.props.row.map(function(cell,index) {
+              return (
+                <Cell key={index} value={cell} rowIndex={self.props.rowIndex} cellIndex={index}/>
+              );
+          })}
+        </tr>
+      );
+    }
+});
+
+var App = React.createClass({
+    getInitialState: function () {
+      return {
+        tableContent: TABLECONTENT || [[]]
+      }
+    }
+    ,addRow: function () {
+      var title = prompt("Enter the row title");
+      var row = [];
+      if(!TABLECONTENT) {
+        TABLECONTENT = [[""]];
+      }
+      for(var i = 0; i<TABLECONTENT[0].length;i++) {
+        if(i===0) {
+          row.push(title);
+        } else {
+          row.push("");
+        }
+      }
+      TABLECONTENT.push(row);
+       this.setState({
+        tableContent:TABLECONTENT
+      })
+    }
+    ,addCol: function () {
+      var title = prompt("Enter the col title");
+      if(!TABLECONTENT) {
+        TABLECONTENT = [[""]];
+      }
+      for(var i=0;i<TABLECONTENT.length;i++) {
+        if(i===0){
+          TABLECONTENT[i].push(title);
+        } else {
+          TABLECONTENT[i].push("");
+        }
+      }
+      this.setState({
+        tableContent:TABLECONTENT
+      })
+    }
+    ,save : function () {
+      console.log("save me");
+      
+    }
+    ,render: function () {
+    console.log('My name is react and I am working');
+    console.log(TABLECONTENT);
+      return (
+        <div>
+          <table>
+            <tbody>
+              {this.state.tableContent.map(function (row, index) {
+                    return (<Row key={index} row={row} rowIndex={index}/>);
+                })}
+            </tbody>
+          </table>
+          <button onClick={this.addRow}>Add a row</button>
+          <button onClick={this.addCol}>Add a col</button>
+          <button onClick={function() {localStorage.setItem("MonTableau", JSON.stringify(TABLECONTENT));}}>Save</button>
+          <button onClick={function() {TABLECONTENT = JSON.parse(localStorage.getItem("MonTableau")); app.setState({tableContent: TABLECONTENT})}}>Load</button>
+        </div>
+      );
+    }
+
+});
+
+
+app = ReactDOM.render(
+      <App/>, document.getElementById('tableau')
+    );
+
+    </script>
+  
+  </body>
+</html>
