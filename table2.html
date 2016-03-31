@@ -99,8 +99,9 @@ var App = React.createClass({
         tableContent:TABLECONTENT
       })
     }
-    ,edit : function () {
-      console.log("make me editable");
+    ,save : function () {
+      console.log("save me");
+      
     }
     ,render: function () {
     console.log('My name is react and I am working');
@@ -116,6 +117,8 @@ var App = React.createClass({
           </table>
           <button onClick={this.addRow}>Add a row</button>
           <button onClick={this.addCol}>Add a col</button>
+          <button onClick={function() {localStorage.setItem("MonTableau", JSON.stringify(TABLECONTENT));}}>Save</button>
+          <button onClick={function() {TABLECONTENT = JSON.parse(localStorage.getItem("MonTableau")); app.setState({tableContent: TABLECONTENT})}}>Load</button>
         </div>
       );
     }
