@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mon tableau</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <style>
+    h1 {
+      color: green;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 10px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <h1>Mon TABLEAU</h1>
+    <div id="tableau"></div>
+
+    <script  type="text/babel">
+var app;
+var TABLECONTENT;
+    
+var Cell = React.createClass({
+  handleChange: function(event) {
+    var rowIndex = this.props.rowIndex;
+    var cellIndex = this.props.cellIndex
+    var e = event.target.value;
+    TABLECONTENT[rowIndex][cellIndex] = e;
+    app.setState({
+      tableContent: TABLECONTENT
+    });
+  },
+  render: function () {
+    return (
+      <td>
+        <input type="text" value={this.props.value} onChange={this.handleChange}/>
+      </td>
+    );
+  }
+});
+    
+var Row = React.createClass({
+    render: function () {
+    var self = this;
+      return (
+        <tr>
+          {this.props.row.map(function(cell,index) {
+          return (
+            <Cell key={index} value={cell} rowIndex={self.props.rowIndex} cellIndex={index}/>
+          );
+          })}
+        </tr>
+      );
+    }
+});
+
+var App = React.createClass({
+    getInitialState: function () {
+      return {
+        tableContent: TABLECONTENT || [[]]
+      }
+    }
+    ,addRow: function () {
+      var title = prompt("Enter the row title");
+      var row = [];
+      if(!TABLECONTENT) {
+        TABLECONTENT = [[""]];
+      }
+      for(var i = 0; i<TABLECONTENT[0].length;i++) {
+        if(i===0) {
+          row.push(title);
+        } else {
+          row.push("");
+        }
+      }
+      TABLECONTENT.push(row);
+       this.setState({
+        tableContent:TABLECONTENT
+      })
+    }
+    ,addCol: function () {
+      var title = prompt("Enter the col title");
+      if(!TABLECONTENT) {
+        TABLECONTENT = [[""]];
+      }
+      for(var i=0;i<TABLECONTENT.length;i++) {
+        if(i===0){
+          TABLECONTENT[i].push(title);
+        } else {
+          TABLECONTENT[i].push("");
+        }
+      }
+      this.setState({
+        tableContent:TABLECONTENT
+      })
+    }
+    ,edit : function () {
+      console.log("make me editable");
+    }
+    ,render: function () {
+    console.log('My name is react and I am working');
+    console.log(TABLECONTENT);
+      return (
+        <div>
+          <table>
+            <tbody>
+              {this.state.tableContent.map(function (row, index) {
+                    return (<Row key={index} row={row} rowIndex={index}/>);
+                })}
+            </tbody>
+          </table>
+          <button onClick={this.addRow}>Add a row</button>
+          <button onClick={this.addCol}>Add a col</button>
+        </div>
+      );
+    }
+
+});
+
+
+app = ReactDOM.render(
+      <App/>, document.getElementById('tableau')
+    );
+
+    </script>
+  
+  </body>
+</html>
