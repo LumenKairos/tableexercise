@@ -25,10 +25,10 @@
     <script  type="text/babel">
 var app;
 var TABLECONTENT = [
-  ["a","1"],
-  ["b","2"],
-  ["c","3"],
-  ["d","4"]
+  ["","1","2","3"],
+  ["a","4","5","6"],
+  ["b","7","8","9"],
+  ["c","10","11","12"]
 ];
     
 var Cell = React.createClass({
@@ -61,26 +61,76 @@ var Cell = React.createClass({
       tableContent: TABLECONTENT
     });
   },
+  moveColLeft: function() {
+    var indexCol = this.props.cellIndex;
+    var movedCol;
+    var replacedCol;
+    for(var i=0; i<TABLECONTENT.length;i++) {
+      movedCol = TABLECONTENT[i][indexCol];
+      replacedCol = TABLECONTENT[i][indexCol -1];
+      TABLECONTENT[i][indexCol -1] = movedCol;
+      TABLECONTENT[i][indexCol] = replacedCol;
+    }
+    app.setState({
+      tableContent: TABLECONTENT
+    });
+  },
+  moveColRight: function () {
+    var indexCol = this.props.cellIndex;
+    var movedCol;
+    var replacedCol;
+    for(var i=0; i<TABLECONTENT.length;i++) {
+      movedCol = TABLECONTENT[i][indexCol];
+      replacedCol = TABLECONTENT[i][indexCol +1];
+      TABLECONTENT[i][indexCol +1] = movedCol;
+      TABLECONTENT[i][indexCol] = replacedCol;
+    }
+    app.setState({
+      tableContent: TABLECONTENT
+    });
+  },
   render: function () {
     if(this.props.rowIndex>1 && this.props.rowIndex<TABLECONTENT.length - 1 && this.props.cellIndex === 0) {
       return (
       <td>
-        <i className="fa fa-chevron-left" onClick={this.moveRowUp}></i>
+        <i className="fa fa-chevron-up" onClick={this.moveRowUp}></i>
         <input type="text" value={this.props.value} onChange={this.handleChange}/>
-        <i className="fa fa-chevron-right" onClick={this.moveRowDown}></i>
+        <i className="fa fa-chevron-down" onClick={this.moveRowDown}></i>
       </td>
       );
     } else if(this.props.rowIndex===1 && this.props.cellIndex === 0) {
       return (
       <td>
         <input type="text" value={this.props.value} onChange={this.handleChange}/>
-        <i className="fa fa-chevron-right" onClick={this.moveRowDown}></i>
+        <i className="fa fa-chevron-down" onClick={this.moveRowDown}></i>
       </td>
       );
     } else if(this.props.rowIndex===TABLECONTENT.length - 1 && this.props.cellIndex === 0) {
       return (
       <td>
-        <i className="fa fa-chevron-left" onClick={this.moveRowUp}></i>
+        <i className="fa fa-chevron-up" onClick={this.moveRowUp}></i>
+        <input type="text" value={this.props.value} onChange={this.handleChange}/>
+      </td>
+      );
+    } else if (this.props.rowIndex===0 && this.props.cellIndex>1 && this.props.cellIndex<TABLECONTENT[0].length - 1) {
+      return (
+      <td>
+        <i className="fa fa-chevron-left" onClick={this.moveColLeft}></i>
+        <input type="text" value={this.props.value} onChange={this.handleChange}/>
+        <i className="fa fa-chevron-right" onClick={this.moveColRight}></i>
+      </td>
+      );
+    } else if (this.props.rowIndex===0 && this.props.cellIndex===1) {
+      return (
+      <td>
+        <input type="text" value={this.props.value} onChange={this.handleChange}/>
+        <i className="fa fa-chevron-right" onClick={this.moveColRight}></i>
+      </td>
+      );
+    } else if (this.props.rowIndex===0 && this.props.cellIndex===TABLECONTENT[0].length - 1) {
+      return (
+      <td>
+        <i className="fa fa-chevron-left" onClick={this.moveColLeft}></i>
         <input type="text" value={this.props.value} onChange={this.handleChange}/>
       </td>
       );
