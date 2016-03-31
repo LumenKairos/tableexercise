@@ -52,7 +52,14 @@ var Cell = React.createClass({
     });
   },
   moveRowDown: function(){
-    console.log("Row moved down")
+    var index = this.props.rowIndex;
+    var movedRow = TABLECONTENT[index];
+    var replacedRow= TABLECONTENT[index + 1];
+    TABLECONTENT[index + 1] = movedRow;
+    TABLECONTENT[index] = replacedRow;
+    app.setState({
+      tableContent: TABLECONTENT
+    });
   },
   render: function () {
     if(this.props.rowIndex>1 && this.props.rowIndex<TABLECONTENT.length - 1 && this.props.cellIndex === 0) {
