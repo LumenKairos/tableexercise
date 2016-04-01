@@ -30,6 +30,8 @@ var TABLECONTENT = [
   ["b","7","8","9"],
   ["c","10","11","12"]
 ];
+var hiddenTable;
+console.log("hiddenTable" + hiddenTable);
     
 var Cell = React.createClass({
   handleChange: function(event) {
@@ -91,8 +93,6 @@ var Cell = React.createClass({
   },
   switch: function() {
     var reversedTableContent = [];
-    
-    
     for (var j=0;j<TABLECONTENT[0].length;j++) {
       reversedTableContent.push([TABLECONTENT[0][j]]);
       for(var i=1;i<TABLECONTENT.length;i++) {
@@ -105,6 +105,37 @@ var Cell = React.createClass({
       tableContent: TABLECONTENT
     });
   },
+  hideRow: function() {
+    var indexRow = this.props.rowIndex;
+    if(!Array.isArray(hiddenTable)) {
+      console.log("hiddenTable is not an array yet");
+      hiddenTable = [];
+      for(var i=0; i<TABLECONTENT.length;i++) {
+        hiddenTable.push(TABLECONTENT[i]);
+      }
+    }
+    hiddenTable.splice(indexRow,1);
+    console.log(TABLECONTENT);
+    app.setState({
+      tableContent: hiddenTable
+    });
+  },
+  hideCol: function() {
+    var indexCol = this.props.cellIndex;
+    if(!Array.isArray(hiddenTable)) {
+      console.log("hiddenTable is not an array yet");
+      hiddenTable = [];
+      for(var i=0; i<TABLECONTENT.length;i++) {
+        hiddenTable.push(TABLECONTENT[i]);
+      }
+    }
+    for(var j = 0; j<hiddenTable.length;j++) {
+        hiddenTable[j].splice(indexCol,1);
+    }
+    app.setState({
+      tableContent: hiddenTable
+    });
+  },
   render: function () {
     if(this.props.rowIndex>1 && this.props.rowIndex<TABLECONTENT.length - 1 && this.props.cellIndex === 0) {
       return (
@@ -112,6 +143,7 @@ var Cell = React.createClass({
         <i className="fa fa-chevron-up" onClick={this.moveRowUp}></i>
         <input type="text" value={this.props.value} onChange={this.handleChange}/>
         <i className="fa fa-chevron-down" onClick={this.moveRowDown}></i>
+        <i className="fa fa-lock" onClick={this.hideRow}></i>
       </td>
       );
     } else if(this.props.rowIndex===1 && this.props.cellIndex === 0) {
@@ -119,6 +151,7 @@ var Cell = React.createClass({
       <td>
         <input type="text" value={this.props.value} onChange={this.handleChange}/>
         <i className="fa fa-chevron-down" onClick={this.moveRowDown}></i>
+        <i className="fa fa-lock" onClick={this.hideRow}></i>
       </td>
       );
     } else if(this.props.rowIndex===TABLECONTENT.length - 1 && this.props.cellIndex === 0) {
@@ -126,6 +159,7 @@ var Cell = React.createClass({
       <td>
         <i className="fa fa-chevron-up" onClick={this.moveRowUp}></i>
         <input type="text" value={this.props.value} onChange={this.handleChange}/>
+        <i className="fa fa-lock" onClick={this.hideRow}></i>
       </td>
       );
     } else if (this.props.rowIndex===0 && this.props.cellIndex>1 && this.props.cellIndex<TABLECONTENT[0].length - 1) {
@@ -134,6 +168,7 @@ var Cell = React.createClass({
         <i className="fa fa-chevron-left" onClick={this.moveColLeft}></i>
         <input type="text" value={this.props.value} onChange={this.handleChange}/>
         <i className="fa fa-chevron-right" onClick={this.moveColRight}></i>
+        <i className="fa fa-lock" onClick={this.hideCol}></i>
       </td>
       );
     } else if (this.props.rowIndex===0 && this.props.cellIndex===1) {
@@ -141,6 +176,7 @@ var Cell = React.createClass({
       <td>
         <input type="text" value={this.props.value} onChange={this.handleChange}/>
         <i className="fa fa-chevron-right" onClick={this.moveColRight}></i>
+        <i className="fa fa-lock" onClick={this.hideCol}></i>
       </td>
       );
     } else if (this.props.rowIndex===0 && this.props.cellIndex===TABLECONTENT[0].length - 1) {
@@ -148,6 +184,7 @@ var Cell = React.createClass({
       <td>
         <i className="fa fa-chevron-left" onClick={this.moveColLeft}></i>
         <input type="text" value={this.props.value} onChange={this.handleChange}/>
+        <i className="fa fa-lock" onClick={this.hideCol}></i>
       </td>
       );
     } else if (this.props.rowIndex===0 && this.props.cellIndex===0) {
@@ -237,6 +274,7 @@ var App = React.createClass({
           <button onClick={this.addCol}>Add a col</button>
           <button onClick={function() {localStorage.setItem("MonTableau", JSON.stringify(TABLECONTENT));}}>Save</button>
           <button onClick={function() {TABLECONTENT = JSON.parse(localStorage.getItem("MonTableau")); app.setState({tableContent: TABLECONTENT})}}>Load</button>
+          <button onClick={function() {app.setState({tableContent: TABLECONTENT}); hiddenTable = null;}}>Full Table</button>
         </div>
       );
     }
