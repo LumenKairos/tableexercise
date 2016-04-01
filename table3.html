@@ -89,6 +89,22 @@ var Cell = React.createClass({
       tableContent: TABLECONTENT
     });
   },
+  switch: function() {
+    var reversedTableContent = [];
+    
+    
+    for (var j=0;j<TABLECONTENT[0].length;j++) {
+      reversedTableContent.push([TABLECONTENT[0][j]]);
+      for(var i=1;i<TABLECONTENT.length;i++) {
+        reversedTableContent[j].push(TABLECONTENT[i][j]);
+      }
+    }
+    console.log(reversedTableContent);
+    TABLECONTENT = reversedTableContent;
+    app.setState({
+      tableContent: TABLECONTENT
+    });
+  },
   render: function () {
     if(this.props.rowIndex>1 && this.props.rowIndex<TABLECONTENT.length - 1 && this.props.cellIndex === 0) {
       return (
@@ -132,6 +148,12 @@ var Cell = React.createClass({
       <td>
         <i className="fa fa-chevron-left" onClick={this.moveColLeft}></i>
         <input type="text" value={this.props.value} onChange={this.handleChange}/>
+      </td>
+      );
+    } else if (this.props.rowIndex===0 && this.props.cellIndex===0) {
+      return (
+      <td>
+        <i className="fa fa-arrows-h" onClick={this.switch}></i>
       </td>
       );
     } else {
@@ -198,10 +220,6 @@ var App = React.createClass({
       this.setState({
         tableContent:TABLECONTENT
       })
-    }
-    ,save : function () {
-      console.log("save me");
-      
     }
     ,render: function () {
     console.log('My name is react and I am working');
